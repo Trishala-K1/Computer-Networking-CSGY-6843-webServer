@@ -28,7 +28,7 @@ def webServer(port=13331):
             filename = message.split()[1]
             # opens the client requested file.
             # Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-            f = open(filename[1:])  # fill in start #fill in end)
+            f = open(filename[1:], 'rb')  # fill in start #fill in end)
                      # fill in end
             outputdata=b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
             # Fill in start -This variable can store your headers you want to send for any valid or invalid request.
@@ -42,17 +42,18 @@ def webServer(port=13331):
             # Fill in end
 
             # Send the content of the requested file to the client
+
             text = f.read()
-            text_encoded = text.encode()
-            outputdata = outputdata + text_encoded
             f.close()
+            outputdata = outputdata + text
+
             for i in f:  # for line in file
                 connectionSocket.send(outputdata)
             # Fill in start - send your html file contents #Fill in end
                 connectionSocket.close()  # closing the connection socket
 
         except Exception as e:
-            connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
+            connectionSocket.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
 
     # Send response message for invalid request due to the file not being found (404)
     # Fill in start
