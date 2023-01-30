@@ -26,11 +26,14 @@ def webServer(port=13331):
             # It takes the line sent by the client converts the message to a string.
             message = connectionSocket.recv(2048).decode() # Fill in start -a client is sending you a message   #Fill in end
             filename = message.split()[1]
+            #print(filename)
             # opens the client requested file.
             # Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-            f = open(filename[1:], 'rb')  # fill in start #fill in end)
-                     # fill in end
-            outputdata=b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
+            f = open(filename[1:])  # fill in start #fill in end)
+            #print(f.read())
+            # fill in end
+            outputdata = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n".decode()
+            #print(outputdata)
             # Fill in start -This variable can store your headers you want to send for any valid or invalid request.
             # Content-Type above is an example on how to send a header as bytes
             # Fill in end
@@ -43,10 +46,11 @@ def webServer(port=13331):
 
             # Send the content of the requested file to the client
 
-            text = f.read()
+            text = f.read().decode()
             f.close()
-            outputdata = outputdata + text
-
+            #print(text)
+            outputdata = outputdata.decode()+text.decode()
+            #print(outputdata)
             for i in range(len(outputdata)):  # for line in file
                 connectionSocket.send(outputdata.encode())
             # Fill in start - send your html file contents #Fill in end
@@ -69,7 +73,6 @@ def webServer(port=13331):
     # Commenting out the below, as its technically not required and some students have moved it erroneously in the While loop. DO NOT DO THAT OR YOURE GONNA HAVE A BAD TIME.
     serverSocket.close()
     sys.exit()  # Terminate the program after sending the corresponding data
-
 
 if __name__ == "__main__":
     webServer(13331)
