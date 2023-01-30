@@ -29,10 +29,10 @@ def webServer(port=13331):
             #print(filename)
             # opens the client requested file.
             # Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-            f = open(filename[1:])  # fill in start #fill in end)
+            f = open(filename[1:], 'rb')  # fill in start #fill in end)
             #print(f.read())
             # fill in end
-            outputdata = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n".decode()
+            outputdata = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
             #print(outputdata)
             # Fill in start -This variable can store your headers you want to send for any valid or invalid request.
             # Content-Type above is an example on how to send a header as bytes
@@ -41,18 +41,15 @@ def webServer(port=13331):
             # 200 OK: Request succeeded and the information is returned in the response.
             # Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
             # Fill in start
-
             # Fill in end
-
             # Send the content of the requested file to the client
-
-            text = f.read().decode()
+            text = f.read()
             f.close()
             #print(text)
-            outputdata = outputdata.decode()+text.decode()
+            outputdata += text
             #print(outputdata)
             for i in range(len(outputdata)):  # for line in file
-                connectionSocket.send(outputdata.encode())
+                connectionSocket.send(outputdata)
             # Fill in start - send your html file contents #Fill in end
                 connectionSocket.close()  # closing the connection socket
 
@@ -67,7 +64,6 @@ def webServer(port=13331):
     # Close client socket
             connectionSocket.close()
     # Fill in start
-
     # Fill in end
 
     # Commenting out the below, as its technically not required and some students have moved it erroneously in the While loop. DO NOT DO THAT OR YOURE GONNA HAVE A BAD TIME.
