@@ -44,14 +44,15 @@ def webServer(port=13331):
             # Send the content of the requested file to the client
             text = f.read()
             outputdata = outputdata + text
-
+            f.close()
             for i in f:  # for line in file
                 connectionSocket.send(outputdata.encode())
             # Fill in start - send your html file contents #Fill in end
                 connectionSocket.close()  # closing the connection socket
 
         except Exception as e:
-            connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n")
+            connectionSocket.send("HTTP/1.1 404 Not Found\r\n\r\n".encode())
+            
     # Send response message for invalid request due to the file not being found (404)
     # Fill in start
 
@@ -64,8 +65,8 @@ def webServer(port=13331):
     # Fill in end
 
     # Commenting out the below, as its technically not required and some students have moved it erroneously in the While loop. DO NOT DO THAT OR YOURE GONNA HAVE A BAD TIME.
-    # serverSocket.close()
-    # sys.exit()  # Terminate the program after sending the corresponding data
+    serverSocket.close()
+    sys.exit()  # Terminate the program after sending the corresponding data
 
 
 if __name__ == "__main__":
